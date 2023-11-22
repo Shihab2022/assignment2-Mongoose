@@ -1,0 +1,4 @@
+{
+  "builds": [{ "src": "tsconfig.json", "use": "@vercel/node" }],
+  "routes": [{ "src": "/(.*)", "dest": "/dist/$1" }]
+}
