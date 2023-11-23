@@ -12,12 +12,17 @@ const getAllUserDB = async () => {
     const result = UserModel.aggregate([
         { $match: {} },
         {
-            $project: { username: 1, fullName: 1, age: 1, email: 1, address: 1 }
+            $project: { userId: 1, username: 1, fullName: 1, age: 1, email: 1, address: 1 }
         }
     ])
     return result
 }
+const getSingleUserDB = async (id: string) => {
+    const result = UserModel.findOne({ userId: id })
+    return result
+}
 export const userServices = {
     createUserInDB,
-    getAllUserDB
+    getAllUserDB,
+    getSingleUserDB
 }
