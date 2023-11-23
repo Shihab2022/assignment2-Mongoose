@@ -25,9 +25,14 @@ const updateUserDB = async (id: string, data: TUser) => {
     const result = UserModel.updateOne({ userId: id }, { $set: data })
     return result
 }
+const deleteUserDB = async (id: string) => {
+    const result = UserModel.deleteOne({ userId: id })
+    return result
+}
 export const userServices = {
     createUserInDB,
     getAllUserDB,
     getSingleUserDB,
-    updateUserDB
+    updateUserDB,
+    deleteUserDB
 }
