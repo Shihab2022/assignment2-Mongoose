@@ -8,6 +8,11 @@ const createUserInDB = async (userData: TUser) => {
 
 }
 
+const getAllUserDB = async () => {
+    const result = UserModel.find()
+    return result
+}
 export const userServices = {
-    createUserInDB
+    createUserInDB,
+    getAllUserDB
 }
