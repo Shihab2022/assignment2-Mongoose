@@ -9,7 +9,12 @@ const createUserInDB = async (userData: TUser) => {
 }
 
 const getAllUserDB = async () => {
-    const result = UserModel.find()
+    const result = UserModel.aggregate([
+        { $match: {} },
+        {
+            $project: { username: 1, fullName: 1, age: 1, email: 1, address: 1 }
+        }
+    ])
     return result
 }
 export const userServices = {
