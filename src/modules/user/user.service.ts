@@ -59,12 +59,21 @@ const addOrderDB = async (id: string, orderData: TOrder) => {
         throw new Error('User is not  exits')
     }
 }
-
+const getSingleOrderDB = async (id: string) => {
+    const result = UserModel.aggregate([
+        { $match: { userId: parseInt(id) } },
+        {
+            $project: { orders: 1 }
+        }
+    ])
+    return result
+}
 export const userServices = {
     createUserInDB,
     getAllUserDB,
     getSingleUserDB,
     updateUserDB,
     deleteUserDB,
-    addOrderDB
+    addOrderDB,
+    getSingleOrderDB
 }

@@ -109,11 +109,30 @@ const addOrder = async (req: Request, res: Response) => {
         })
     }
 }
+
+const getSingleOrder = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params
+        const order = await userServices.getSingleOrderDB(userId);
+        // console.log(order[0].orders)
+        res.status(201).json({
+            success: true,
+            message: "Order fetched successfully!",
+            data: { orders: order[0].orders },
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error,
+        })
+    }
+}
 export const userController = {
     createUser,
     getAllUser,
     getSingleUser,
     updateUser,
     deleteUser,
-    addOrder
+    addOrder,
+    getSingleOrder
 }
