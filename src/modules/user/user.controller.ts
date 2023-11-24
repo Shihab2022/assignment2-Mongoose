@@ -127,6 +127,23 @@ const getSingleOrder = async (req: Request, res: Response) => {
         })
     }
 }
+
+const getTotalCost = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params
+        const cost = await userServices.getTotalCostDB(userId);
+        res.status(201).json({
+            success: true,
+            message: "Total price calculated successfully!",
+            data: { totalPrice: cost[0].totalCost },
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error,
+        })
+    }
+}
 export const userController = {
     createUser,
     getAllUser,
@@ -134,5 +151,6 @@ export const userController = {
     updateUser,
     deleteUser,
     addOrder,
-    getSingleOrder
+    getSingleOrder,
+    getTotalCost
 }

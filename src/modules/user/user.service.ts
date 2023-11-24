@@ -68,6 +68,26 @@ const getSingleOrderDB = async (id: string) => {
     ])
     return result
 }
+const getTotalCostDB = async (id: string) => {
+    const result = UserModel.aggregate([
+        { $match: { userId: parseInt(id) } },
+        {
+            $unwind: "$orders"
+        },
+        {
+            $project: {
+                totalCost: { $multiply: ["$orders.price", "$orders.quantity"] }
+            }
+        },
+        {
+            $group: {
+                _id: null,
+                totalCost: { $sum: "$totalCost" }
+            }
+        }
+    ])
+    return result
+}
 export const userServices = {
     createUserInDB,
     getAllUserDB,
@@ -75,5 +95,6 @@ export const userServices = {
     updateUserDB,
     deleteUserDB,
     addOrderDB,
-    getSingleOrderDB
+    getSingleOrderDB,
+    getTotalCostDB
 }
