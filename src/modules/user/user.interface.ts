@@ -1,3 +1,5 @@
+import { Model } from "mongoose"
+import { TOrder } from "../order/order.interface"
 
 
 
@@ -21,5 +23,12 @@ export type TUser = {
         city: string,
         country: string
     }
+    orders?: TOrder[]
 }
 
+
+export type UserMethods = {
+    isUserExits(id: string): Promise<TUser | null>
+}
+
+export type UserInterfaceModel = Model<TUser, Record<string, never>, UserMethods>

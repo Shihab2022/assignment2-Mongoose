@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { userServices } from "./user.service";
+import { TOrder } from "../order/order.interface";
 
 const createUser = async (req: Request, res: Response) => {
     try {
@@ -88,10 +89,31 @@ const deleteUser = async (req: Request, res: Response) => {
         })
     }
 }
+
+const addOrder = async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params
+        const data = req.body
+        const user = await userServices.addOrderDB(userId, data);
+
+        res.status(201).json({
+            success: true,
+            message: "Get single user successfully!",
+            data: user,
+            // id: userId
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error,
+        })
+    }
+}
 export const userController = {
     createUser,
     getAllUser,
     getSingleUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    addOrder
 }

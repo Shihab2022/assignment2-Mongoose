@@ -1,8 +1,9 @@
 import mongoose, { Schema } from "mongoose";
-import { TUser } from "./user.interface";
+import { TUser, UserInterfaceModel, UserMethods } from "./user.interface";
+import { orderSchema } from "../order/order.model";
 
 
-const userSchema = new Schema<TUser>({
+const userSchema = new Schema<TUser, UserInterfaceModel, UserMethods>({
     userId: {
         type: Number,
         required: [true, 'User ID is required'],
@@ -49,6 +50,16 @@ const userSchema = new Schema<TUser>({
             required: [true, 'Country is required'],
         },
     },
+    orders: {
+        type: [orderSchema],
+    }
 });
 
-export const UserModel = mongoose.model<TUser>('User', userSchema);
+
+//---> Creating a custom instance method 
+userSchema.methods.isUserExits = async function (id: string) {
+    const existingUser = await UserModel.findOne({ userId: id })
+
+    return existingUser
+}
+export const UserModel = mongoose.model<TUser, UserInterfaceModel>('User', userSchema);
