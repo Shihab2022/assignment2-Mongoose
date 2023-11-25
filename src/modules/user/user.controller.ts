@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { userServices } from "./user.service";
 import { validationSchema } from "./validation.schema";
+import { customErrorMessage } from "./user.error";
 
 const createUser = async (req: Request, res: Response) => {
     try {
@@ -16,14 +17,7 @@ const createUser = async (req: Request, res: Response) => {
 
     }
     catch (error: any) {
-        res.status(500).json({
-            success: false,
-            message: error.message || "something went wrong ",
-            error: {
-                code: 404,
-                description: error.message || "something went wrong ",
-            },
-        })
+        res.status(500).json(customErrorMessage(error))
     }
 }
 
@@ -54,11 +48,8 @@ const getSingleUser = async (req: Request, res: Response) => {
             message: "Get single user successfully!",
             data: result
         })
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            error: error,
-        })
+    } catch (error: any) {
+        res.status(500).json(customErrorMessage(error))
     }
 }
 
@@ -150,6 +141,17 @@ const getTotalCost = async (req: Request, res: Response) => {
         })
     }
 }
+
+// const customErrorFunction = (Text.any, statusCode: any)=> {
+//     return {
+//         success: false,
+//         message: error.message || "something went wrong ",
+//         error: {
+//             code: 404,
+//             description: error.message || "something went wrong ",
+//         },
+//     }
+// }
 export const userController = {
     createUser,
     getAllUser,

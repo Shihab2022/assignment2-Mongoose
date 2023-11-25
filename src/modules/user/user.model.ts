@@ -63,9 +63,10 @@ userSchema.pre('save', async function (next) {
     next()
 })
 
-// userSchema.post('save', function (doc, next) {
-//     this.deleteOne(doc.password)
-//     //  doc.password = ''
+// userSchema.post('findOne', function (doc, next) {
+//     // this.deleteOne(doc.password)
+//     doc.password = ''
+//     console.log(doc)
 //     next()
 // })
 
@@ -75,9 +76,4 @@ userSchema.statics.isUserExistsStatic = async function (id: string) {
 
 }
 
-// userSchema.methods.isUserExits = async function (id: string) {
-//     const existingUser = await UserModel.findOne({ userId: id })
-
-//     return existingUser
-// }
 export const UserModel = mongoose.model<TUser, UserMethods>('User', userSchema);
