@@ -36,8 +36,18 @@ const getSingleUserDB = async (id: string) => {
     }
 }
 const updateUserDB = async (id: string, data: TUser) => {
-    const result = UserModel.updateOne({ userId: id }, { $set: data })
-    return result
+    if (await UserModel.isUserExistsStatic(id)) {
+        const result = UserModel.aggregate([
+            { $match: { userId: parseFloat(id) } },
+            { $set: data },
+            { $project: { userId: 1, username: 1, fullName: 1, age: 1, email: 1, isActive: 1, hobbies: 1, address: 1 } }
+        ])
+        return result
+    }
+    else {
+        throw new Error("User not found ")
+    }
+
 }
 const deleteUserDB = async (id: string) => {
     const result = UserModel.deleteOne({ userId: id })

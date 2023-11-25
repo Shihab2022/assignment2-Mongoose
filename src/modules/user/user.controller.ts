@@ -63,11 +63,8 @@ const updateUser = async (req: Request, res: Response) => {
             message: "Update user successfully!",
             data: result
         })
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            error: error,
-        })
+    } catch (error: any) {
+        res.status(500).json(customErrorMessage(error))
     }
 }
 const deleteUser = async (req: Request, res: Response) => {
