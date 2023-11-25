@@ -37,11 +37,13 @@ const getSingleUserDB = async (id: string) => {
 }
 const updateUserDB = async (id: string, data: TUser) => {
     if (await UserModel.isUserExistsStatic(id)) {
-        const result = UserModel.aggregate([
-            { $match: { userId: parseFloat(id) } },
-            { $set: data },
-            { $project: { userId: 1, username: 1, fullName: 1, age: 1, email: 1, isActive: 1, hobbies: 1, address: 1 } }
-        ])
+        const result = UserModel.findOneAndUpdate(
+            { userId: id },
+            {
+                $set: data,
+            },
+            { select: 'userId username fullName age email isActive hobbies address' }
+        )
         return result
     }
     else {
@@ -61,6 +63,9 @@ const deleteUserDB = async (id: string) => {
 }
 const addOrderDB = async (id: string, orderData: TOrder) => {
     if (await UserModel.isUserExistsStatic(id)) {
+        if (!orderData.productName || !orderData.price || !orderData.quantity) {
+            throw new Error("Please put order data correctly !")
+        }
         const result = UserModel.findOneAndUpdate(
             { userId: id },
             {
