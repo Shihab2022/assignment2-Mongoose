@@ -68,7 +68,7 @@ userSchema.post('save', function (doc, next) {
     next()
 })
 
-//---> Creating a custom instance method 
+
 userSchema.methods.isUserExits = async function (id: string) {
     const existingUser = await UserModel.findOne({ userId: id })
 
