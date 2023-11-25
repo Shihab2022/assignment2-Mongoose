@@ -60,8 +60,7 @@ const addOrder = async (req: Request, res: Response) => {
         const { userId } = req.params
         const data = req.body
         const user = await userServices.addOrderDB(userId, data);
-
-        res.status(200).json(customSuccessMessage("Order created successfully!", null))
+        res.status(200).json(customSuccessMessage("Order created successfully!", user && null))
     } catch (error: any) {
         res.status(500).json(customErrorMessage(error))
     }

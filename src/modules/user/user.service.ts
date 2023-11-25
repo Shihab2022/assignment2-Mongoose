@@ -60,14 +60,19 @@ const deleteUserDB = async (id: string) => {
 
 }
 const addOrderDB = async (id: string, orderData: TOrder) => {
-    const data = new UserModel(orderData)
-    if (! await data.isUserExits(id)) {
-        console.log('hello thisis ')
-        return 'hello'
+    if (await UserModel.isUserExistsStatic(id)) {
+        const result = UserModel.findOneAndUpdate(
+            { userId: id },
+            {
+                $push: {
+                    orders: orderData,
+                },
+            },
+        )
+        return result
     }
     else {
-        console.log('not exist')
-        throw new Error('User is not  exits')
+        throw new Error("User not found ")
     }
 }
 const getSingleOrderDB = async (id: string) => {

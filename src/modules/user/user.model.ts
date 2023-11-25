@@ -63,12 +63,6 @@ userSchema.pre('save', async function (next) {
     next()
 })
 
-// userSchema.post('findOne', function (doc, next) {
-//     // this.deleteOne(doc.password)
-//     doc.password = ''
-//     console.log(doc)
-//     next()
-// })
 
 userSchema.statics.isUserExistsStatic = async function (id: string) {
     const isUserExit = await UserModel.findOne({ userId: id })
