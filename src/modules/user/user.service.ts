@@ -50,8 +50,14 @@ const updateUserDB = async (id: string, data: TUser) => {
 
 }
 const deleteUserDB = async (id: string) => {
-    const result = UserModel.deleteOne({ userId: id })
-    return result
+    if (await UserModel.isUserExistsStatic(id)) {
+        const result = UserModel.deleteOne({ userId: id })
+        return result
+    }
+    else {
+        throw new Error("User not found ")
+    }
+
 }
 const addOrderDB = async (id: string, orderData: TOrder) => {
     const data = new UserModel(orderData)

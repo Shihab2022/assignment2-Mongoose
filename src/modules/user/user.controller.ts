@@ -26,7 +26,7 @@ const getAllUser = async (req: Request, res: Response) => {
         const result = await userServices.getAllUserDB()
         res.status(201).json({
             success: true,
-            message: "Get all user successfully!",
+            message: "Users fetched successfully!",
             data: result
         })
 
@@ -45,7 +45,7 @@ const getSingleUser = async (req: Request, res: Response) => {
         const result = await userServices.getSingleUserDB(userId)
         res.status(201).json({
             success: true,
-            message: "Get single user successfully!",
+            message: "User fetched successfully!",
             data: result
         })
     } catch (error: any) {
@@ -60,7 +60,7 @@ const updateUser = async (req: Request, res: Response) => {
         const result = await userServices.updateUserDB(userId, data)
         res.status(201).json({
             success: true,
-            message: "Update user successfully!",
+            message: "User updated successfully!",
             data: result
         })
     } catch (error: any) {
@@ -73,14 +73,11 @@ const deleteUser = async (req: Request, res: Response) => {
         const result = await userServices.deleteUserDB(userId)
         res.status(201).json({
             success: true,
-            message: "Delete user successfully!",
-            data: result
+            message: "User deleted successfully!",
+            data: result.acknowledged ? null : result
         })
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            error: error,
-        })
+    } catch (error: any) {
+        res.status(500).json(customErrorMessage(error))
     }
 }
 
