@@ -9,7 +9,7 @@ const createUserInDB = async (userData: TUser) => {
     }
     const result = await UserModel.create(userData)
     const userWithoutPassword: TUser = result.toObject();
-    const { password, ...newData } = userWithoutPassword
+    const { password, orders, ...newData } = userWithoutPassword
     return newData
 
 }
@@ -42,7 +42,7 @@ const updateUserDB = async (id: string, data: TUser) => {
             {
                 $set: data,
             },
-            { select: 'userId username fullName age email isActive hobbies address' }
+            { new: true, useFindAndModify: false, select: 'userId username fullName age email isActive hobbies address' }
         )
         return result
     }
