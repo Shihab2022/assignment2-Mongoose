@@ -33,21 +33,32 @@ const deleteUserDB = async (id: string) => {
 const addOrderDB = async (id: string, orderData: TOrder) => {
     const data = new UserModel(orderData)
     if (await data.isUserExits(id)) {
-        // const u = await UserModel.aggregate([
-        //     { $match: { userId: parseInt(id) } },
-
-        //     // { $addFields: { orders: [orderData] } }
-        //     // {
-        //     //     $match: {}
-        //     // }
-        // ])
-        const u = await data.isUserExits(id)
-        console.log(u)
-        const updatedUser = await UserModel.findByIdAndUpdate(
-            { userId: parseInt(id) },
-            { $set: { ...u, orders: orderData } },
-            { new: true }
-        );
+        const updatedUser = await UserModel.aggregate([
+            {
+                $match: {
+                    userId: id
+                }
+            },
+            {
+                $set: {
+                    orders: [
+                        {
+                            productName: "New Product",
+                            price: 15.99,
+                            quantity: 4
+                        },
+                        // Add other orders or update existing ones as needed
+                    ]
+                }
+            }
+        ])
+        // const u = await data.isUserExits(id)
+        // console.log(u)
+        // const updatedUser = await UserModel.findByIdAndUpdate(
+        //     { userId: parseInt(id) },
+        //     { $set: { ...u, orders: orderData } },
+        //     { new: true }
+        // );
         return updatedUser
         // const dp = await UserModel.updateOne({ userId: parseInt(id) }, u[0])
         // console.log('dp', dp)
