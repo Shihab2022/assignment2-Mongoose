@@ -1,7 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 import { TUser, UserInterfaceModel, UserMethods } from "./user.interface";
 import { orderSchema } from "../order/order.model";
-
+import bcrypt from 'bcrypt'
+import config from "../../config";
 
 const userSchema = new Schema<TUser, UserInterfaceModel, UserMethods>({
     userId: {
@@ -55,6 +56,17 @@ const userSchema = new Schema<TUser, UserInterfaceModel, UserMethods>({
     }
 });
 
+userSchema.pre('save', async function (next) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const user = this;
+    user.password = await bcrypt.hash(user.password, Number(config.bcrypt_salt_rounds));
+    next()
+})
+
+userSchema.post('save', function (doc, next) {
+    doc.password = ''
+    next()
+})
 
 //---> Creating a custom instance method 
 userSchema.methods.isUserExits = async function (id: string) {
