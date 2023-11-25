@@ -4,6 +4,9 @@ import { UserModel } from "./user.model";
 
 
 const createUserInDB = async (userData: TUser) => {
+    if (await UserModel.isUserExistsStatic(userData.userId)) {
+        throw new Error("User already exits ")
+    }
     const result = await UserModel.create(userData)
     const userWithoutPassword: TUser = result.toObject();
     const { password, ...newData } = userWithoutPassword
@@ -15,14 +18,17 @@ const getAllUserDB = async () => {
     const result = UserModel.aggregate([
         { $match: {} },
         {
-            $project: { userId: 1, username: 1, fullName: 1, age: 1, email: 1, address: 1 }
+            $project: { username: 1, fullName: 1, age: 1, email: 1, address: 1 }
         }
     ])
     return result
 }
 const getSingleUserDB = async (id: string) => {
+    // if (! await data.isUserExits(id)) {
     const result = UserModel.findOne({ userId: id })
     return result
+    // }
+
 }
 const updateUserDB = async (id: string, data: TUser) => {
     const result = UserModel.updateOne({ userId: id }, { $set: data })

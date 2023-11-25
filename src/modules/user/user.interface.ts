@@ -24,8 +24,8 @@ export type TUser = {
 }
 
 
-export type UserMethods = {
-    isUserExits(id: string): Promise<TUser | null>
+export interface UserMethods extends Model<TUser> {
+    isUserExistsStatic(userId: number): Promise<TUser | null>
 }
 
-export type UserInterfaceModel = Model<TUser, Record<string, never>, UserMethods>
+// export type UserInterfaceModel = Model<TUser, Record<string, never>, UserMethods>

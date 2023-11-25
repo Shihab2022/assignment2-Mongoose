@@ -1,10 +1,10 @@
 import mongoose, { Schema } from "mongoose";
-import { TUser, UserInterfaceModel, UserMethods } from "./user.interface";
+import { TUser, UserMethods } from "./user.interface";
 import { orderSchema } from "../order/order.model";
 import bcrypt from 'bcrypt'
 import config from "../../config";
 
-const userSchema = new Schema<TUser, UserInterfaceModel, UserMethods>({
+const userSchema = new Schema<TUser, UserMethods>({
     userId: {
         type: Number,
         required: [true, 'User ID is required'],
@@ -69,10 +69,15 @@ userSchema.pre('save', async function (next) {
 //     next()
 // })
 
+userSchema.statics.isUserExistsStatic = async function (id: string) {
+    const isUserExit = await UserModel.findOne({ userId: id })
+    return isUserExit
 
-userSchema.methods.isUserExits = async function (id: string) {
-    const existingUser = await UserModel.findOne({ userId: id })
-
-    return existingUser
 }
-export const UserModel = mongoose.model<TUser, UserInterfaceModel>('User', userSchema);
+
+// userSchema.methods.isUserExits = async function (id: string) {
+//     const existingUser = await UserModel.findOne({ userId: id })
+
+//     return existingUser
+// }
+export const UserModel = mongoose.model<TUser, UserMethods>('User', userSchema);
