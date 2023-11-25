@@ -71,33 +71,47 @@ const addOrderDB = async (id: string, orderData: TOrder) => {
     }
 }
 const getSingleOrderDB = async (id: string) => {
-    const result = UserModel.aggregate([
-        { $match: { userId: parseInt(id) } },
-        {
-            $project: { orders: 1 }
-        }
-    ])
-    return result
+    if (await UserModel.isUserExistsStatic(id)) {
+        const result = UserModel.aggregate([
+            { $match: { userId: parseInt(id) } },
+            {
+                $project: { orders: 1 }
+            }
+        ])
+        return result
+    }
+    else {
+        throw new Error("User not found ")
+    }
+
 }
 const getTotalCostDB = async (id: string) => {
-    const result = UserModel.aggregate([
-        { $match: { userId: parseInt(id) } },
-        {
-            $unwind: "$orders"
-        },
-        {
-            $project: {
-                totalCost: { $multiply: ["$orders.price", "$orders.quantity"] }
+
+    if (await UserModel.isUserExistsStatic(id)) {
+        const result = UserModel.aggregate([
+            { $match: { userId: parseInt(id) } },
+            {
+                $unwind: "$orders"
+            },
+            {
+                $project: {
+                    totalCost: { $multiply: ["$orders.price", "$orders.quantity"] }
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalCost: { $sum: "$totalCost" }
+                }
             }
-        },
-        {
-            $group: {
-                _id: null,
-                totalCost: { $sum: "$totalCost" }
-            }
-        }
-    ])
-    return result
+        ])
+        return result
+    }
+    else {
+        throw new Error("User not found ")
+    }
+
+
 }
 export const userServices = {
     createUserInDB,

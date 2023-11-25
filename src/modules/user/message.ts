@@ -20,3 +20,11 @@ export function customErrorMessage(error: Error): ErrorResponse {
     };
 }
 
+
+export const customSuccessMessage = (messageData: string, successData: any) => {
+    return {
+        success: true,
+        message: messageData,
+        data: successData
+    }
+}
