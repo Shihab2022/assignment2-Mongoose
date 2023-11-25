@@ -63,10 +63,11 @@ userSchema.pre('save', async function (next) {
     next()
 })
 
-userSchema.post('save', function (doc, next) {
-    doc.password = ''
-    next()
-})
+// userSchema.post('save', function (doc, next) {
+//     this.deleteOne(doc.password)
+//     //  doc.password = ''
+//     next()
+// })
 
 
 userSchema.methods.isUserExits = async function (id: string) {

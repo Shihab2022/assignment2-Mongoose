@@ -4,8 +4,10 @@ import { UserModel } from "./user.model";
 
 
 const createUserInDB = async (userData: TUser) => {
-    const result = UserModel.create(userData)
-    return result
+    const result = await UserModel.create(userData)
+    const userWithoutPassword: TUser = result.toObject();
+    const { password, ...newData } = userWithoutPassword
+    return newData
 
 }
 
